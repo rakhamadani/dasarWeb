@@ -13,7 +13,7 @@ body {
 
 a {
     text-decoration: none;
-    color: #1d5b8a;
+    color: #137a18;
 }
 
 a:hover {
@@ -21,7 +21,7 @@ a:hover {
 }
 
 header {
-    background-color: #1d5b8a;
+    background-color: #137a18;
     color: #fff;
     padding: 1rem 1.5rem;
     display: flex;
@@ -61,12 +61,12 @@ section {
 
 section h2 {
     font-size: 1rem;
-    color: #1d5b8a;
+    color: #137a18;
 }
 
 main section:nth-of-type(2) {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
 }
 
@@ -86,7 +86,7 @@ main section:nth-of-type(2) article h3 {
 main section:nth-of-type(2) article p {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #1d5b8a;
+    color: #137a18;
 }
 
 table {
@@ -101,7 +101,7 @@ th, td {
 }
 
 thead {
-    background-color: #1d5b8a;
+    background-color: #137a18;
     color: #fff;
 }
 
@@ -120,6 +120,11 @@ td button {
 
 td button:first-of-type {
     background-color: #f0ad4e;
+    color: #fff;
+}
+
+td button:nth-of-type(2) {
+    background-color: #5bc0de;
     color: #fff;
 }
 
@@ -150,7 +155,7 @@ form select {
 }
 
 form button [type="submit"] {
-    background-color: #1d5b8a;
+    background-color: #137a18;
     color: #fff;
     padding: 0.6rem 1.5rem;
     border: none;
