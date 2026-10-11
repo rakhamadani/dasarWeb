@@ -1,8 +1,10 @@
 <?php
 $page_title = "Beranda";
-$totalBuku = count($_SESSION["buku"] ?? []);
-$totalAnggota = count($_SESSION["anggota"] ?? []);
 include __DIR__ . '/includes/header.php';
+require __DIR__ . '/includes/sidebar.php';
+
+$totalBuku = $pdo->query("SELECT COUNT(*) FROM buku")->fetchColumn();
+$totalAnggota = $pdo->query("SELECT COUNT(*) FROM anggota")->fetchColumn();
 ?>
 
 <body>
