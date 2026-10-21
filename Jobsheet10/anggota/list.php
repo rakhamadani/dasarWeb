@@ -6,6 +6,7 @@ require __DIR__ . '/../includes/koneksi.php';
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
+$isAdmin = ($_SESSION['role'] ?? '') === 'admin';
 
 $perPage = 5;
 $page = max(1, (int) ($_GET['page'] ?? 1));
@@ -55,13 +56,15 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>No. HP</th>
+                        <?php if ($isAdmin): ?>
                         <th>Aksi</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($daftarAnggota)): ?>
                     <tr>
-                        <td colspan="5">Tidak ada data anggota yang cocok.</td>
+                        <td colspan="<?php echo $isAdmin ? '5' : '4'; ?>">Tidak ada data anggota yang cocok.</td>
                     </tr>
                     <?php else: ?>
                         <?php foreach ($daftarAnggota as $anggota): ?>
@@ -70,6 +73,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                             <td><?php echo $anggota['nama']; ?></td>
                             <td><?php echo $anggota['alamat']; ?></td>
                             <td><?php echo $anggota['no_hp']; ?></td>
+                            <?php if ($isAdmin): ?>
                             <td>
                                 <a href="edit.php?id=<?php echo $anggota['id']; ?>" class="btn-edit">Edit</a>
                                 <form class="form-hapus" method="post" action="hapus.php">
@@ -77,6 +81,7 @@ $totalPages = max(1, (int) ceil($totalRows / $perPage));
                                     <button type="submit" class="btn-hapus">Hapus</button>
                                 </form>
                             </td>
+                            <?php endif; ?>
                         </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

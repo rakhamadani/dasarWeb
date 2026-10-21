@@ -7,14 +7,14 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-$page_title = "Registrasi Petugas";
+$page_title = "Registrasi Akun";
 include __DIR__ . '/../includes/header.php';
 
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 ?>
         <section>
-            <h2>Registrasi Petugas</h2>
+            <h2>Registrasi Akun</h2>
 
             <?php if ($flash): ?>
                 <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
@@ -32,6 +32,13 @@ unset($_SESSION['flash']);
                 <p>
                     <label for="password">Password</label><br>
                     <input type="password" id="password" name="password" required minlength="6">
+                </p>
+                <p>
+                    <label for="role">Daftar sebagai</label><br>
+                    <select id="role" name="role" required>
+                        <option value="petugas" selected>Petugas</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </p>
                 <p>
                     <button type="submit">Daftar</button>

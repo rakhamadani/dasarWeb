@@ -23,7 +23,7 @@ include __DIR__ . '/../includes/header.php';
         <?php if (isset($_SESSION['flash'])): ?>
             <div style="background-color: #f8d7da; color: #721c24; padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid #f5c6cb;">
                 <?php 
-                    echo $_SESSION['flash']['pesan']; 
+                    echo htmlspecialchars($_SESSION['flash']['pesan'], ENT_QUOTES, 'UTF-8');
                     unset($_SESSION['flash']);
                 ?>
             </div>
@@ -51,8 +51,8 @@ include __DIR__ . '/../includes/header.php';
                 </label>
             </div>
 
-            <button type="submit" style="width: 100%; background-color: #3498db; color: white; border: none; padding: 0.75rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;"
-                    onmouseover="this.style.backgroundColor='#2980b9'" onmouseout="this.style.backgroundColor='#3498db'">
+            <button type="submit" style="width: 100%; background-color: #137a18; color: white; border: none; padding: 0.75rem; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;"
+                    onmouseover="this.style.backgroundColor='#0f6414'" onmouseout="this.style.backgroundColor='#137a18'">
                 Masuk ke Sistem
             </button>
         </form>

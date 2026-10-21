@@ -1,5 +1,12 @@
 <?php
-session_start();
+require __DIR__ . '/../includes/auth.php';
+
+if (($_SESSION['role'] ?? '') !== 'admin') {
+    $_SESSION['flash'] = ['type' => 'error', 'pesan' => 'Hanya admin yang boleh mengedit anggota.'];
+    header('Location: list.php');
+    exit;
+}
+
 require __DIR__ . '/../includes/koneksi.php';
 
 $id = $_POST['id'] ?? null;

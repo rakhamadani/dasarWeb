@@ -244,7 +244,7 @@ form select {
     font-size: 1rem;
 }
 
-form button [type="submit"] {
+form button[type="submit"] {
     background-color: #137a18;
     color: #fff;
     padding: 0.6rem 1.5rem;
@@ -254,7 +254,7 @@ form button [type="submit"] {
     font-size: 1rem;
 }
 
-form button [type="submit"]:hover {
+form button[type="submit"]:hover {
     background-color: #164869;
 }
 
