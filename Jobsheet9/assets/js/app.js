@@ -13,8 +13,9 @@ document.addEventListener("submit", function (e) {
 const form = e.target;
 if (!form.classList.contains("form-hapus")) return;
 const row = form.closest("tr");
-const nama = row ? row.querySelector("td")?.textContent : "data ini";
-const yakin = confirm("Yakin ingin menghapus \"" + nama + "\"?");
+const nama = form.dataset.confirmName || (row ? row.querySelector("td")?.textContent.trim() : "");
+const jenis = form.dataset.entity || "buku";
+const yakin = confirm("Apakah Anda yakin ingin menghapus " + jenis + " \"" + (nama || "ini") + "\"?");
 if (!yakin) {
 e.preventDefault();
 }
@@ -32,13 +33,14 @@ function initTableFilter() {
     const rows = table.querySelectorAll("tbody tr");
 
     rows.forEach(function (row) {
-      const kolomJudul = row.querySelector("td");
-      
-      if (kolomJudul) {
-        const teksJudul = kolomJudul.textContent.toLowerCase();
-        row.style.display = teksJudul.includes(keyword) ? "" : "none";
-      }
+      const kolomPencarian = Array.from(row.querySelectorAll("td")).slice(0, 2);
+      const cocok = kolomPencarian.some(function (kolom) {
+        return kolom.textContent.toLowerCase().includes(keyword);
+      });
+      row.style.display = cocok ? "" : "none";
     });
+
+    updateCounter();
   });
 }
 

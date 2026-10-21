@@ -26,12 +26,26 @@ $stmt = $pdo->prepare(
      VALUES (:nama, :no_anggota, :alamat, :no_hp)
      RETURNING id"
 );
-$stmt->execute([
-    'nama' => $nama,
-    'no_anggota' => $noAnggota,
-    'alamat' => $alamat,
-    'no_hp' => $noHp,
-]);
+try {
+    $stmt->execute([
+        'nama' => $nama,
+        'no_anggota' => $noAnggota,
+        'alamat' => $alamat,
+        'no_hp' => $noHp,
+    ]);
+} catch (PDOException $e) {
+    $sqlState = $e->errorInfo[0] ?? (string) $e->getCode();
+    if ($sqlState !== '23505') {
+        throw $e;
+    }
+
+    $_SESSION['flash'] = [
+        'type' => 'error',
+        'pesan' => 'No. Anggota tersebut sudah terdaftar. Gunakan nomor anggota yang berbeda.',
+    ];
+    header('Location: tambah.php');
+    exit;
+}
 
 $_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Anggota berhasil ditambahkan.'];
 header('Location: list.php');
