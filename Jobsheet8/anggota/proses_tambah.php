@@ -1,50 +1,52 @@
 <?php
 session_start();
+require __DIR__ . '/../includes/koneksi.php';
 
-$nama = trim($_POST['nama'] ?? '');
-$no_anggota = trim($_POST['no_anggota'] ?? '');
-$alamat = trim($_POST['alamat'] ?? '');
-$no_hp = trim($_POST['no_hp'] ?? '');
+// Ambil data dari form (sesuaikan dengan implementasimu)
+$nama = $_POST['nama'] ?? '';
+$no_anggota = $_POST['no_anggota'] ?? '';
+$alamat = $_POST['alamat'] ?? '';
+$no_hp = $_POST['no_hp'] ?? '';
 
-$errors = [];
-if ($nama === '') {
-    $errors[] = "Nama wajib diisi.";
-}
-if ($no_anggota === '') {
-    $errors[] = "No. Anggota wajib diisi.";
-}
+try {
+    // Siapkan prepared statement untuk INSERT data anggota
+    $stmt = $pdo->prepare(
+        "INSERT INTO anggota (nama, no_anggota, alamat, no_hp)
+         VALUES (:nama, :no_anggota, :alamat, :no_hp)"
+    );
 
-if ($no_hp !== '' && !preg_match('/^[0-9+]+$/', $no_hp)) {
-    $errors[] = "No. HP hanya boleh berisi angka dan tanda +."; // Lat 2, Validasi tambahan untuk No. HP (opsional, jika diisi harus angka/tanda +)
-}
+    // Eksekusi query dengan array data
+    $stmt->execute([
+        'nama' => $nama,
+        'no_anggota' => $no_anggota,
+        'alamat' => $alamat,
+        'no_hp' => $no_hp
+    ]);
 
+    // Jika berhasil, buat flash message sukses dan redirect ke halaman list
+    $_SESSION['flash'] = [
+        'type' => 'success', 
+        'pesan' => 'Anggota berhasil ditambahkan.'
+    ];
+    header('Location: list.php');
+    exit;
 
-if (isset($_SESSION['anggota'])) {
-    foreach ($_SESSION['anggota'] as $item) {
-        if ($item['no_anggota'] === $no_anggota) {
-            $errors[] = "No. Anggota sudah pernah terdaftar."; // Lat2, yang mungkin bisa ditambahkan = cek apakah no_anggota sudah terdaftar di session
-            break;
-        }
+} catch (PDOException $e) {
+    // Tangkap error PostgreSQL (Kode error '23505' adalah kode standar untuk unique_violation)
+    if ($e->getCode() == '23505') {
+        $_SESSION['flash'] = [
+            'type' => 'danger', 
+            'pesan' => 'No. Anggota sudah dipakai, gunakan nomor lain.'
+        ];
+    } else {
+        // Tangkap error PDO lainnya jika terjadi masalah database lain
+        $_SESSION['flash'] = [
+            'type' => 'danger', 
+            'pesan' => 'Terjadi kesalahan pada database: ' . $e->getMessage()
+        ];
     }
-}
 
-if (!empty($errors)) {
-    $_SESSION['flash'] = ['type' => 'error', 'pesan' => implode(' ', $errors)];
+    // Redirect kembali ke form tambah supaya pengguna bisa memperbaiki input
     header('Location: tambah.php');
     exit;
 }
-
-if (!isset($_SESSION['anggota'])) {
-    $_SESSION['anggota'] = [];
-}
-
-$_SESSION['anggota'][] = [
-    'nama' => $nama,
-    'no_anggota' => $no_anggota,
-    'alamat' => $alamat,
-    'no_hp' => $no_hp,
-];
-
-$_SESSION['flash'] = ['type' => 'success', 'pesan' => 'Anggota berhasil ditambahkan.'];
-header('Location: list.php');
-exit;

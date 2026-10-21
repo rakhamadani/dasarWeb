@@ -5,7 +5,18 @@ include __DIR__ . '/../includes/header.php';
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-$daftarBuku = $_SESSION['buku'] ?? [];
+require __DIR__ . '/../includes/koneksi.php';
+
+$keyword = trim($_GET['keyword'] ?? '');
+
+if ($keyword !== '') {
+    $stmt = $pdo->prepare("SELECT * FROM buku WHERE judul ILIKE :keyword ORDER BY id DESC");
+    $stmt->execute(['keyword' => '%' . $keyword . '%']);
+    $daftarBuku = $stmt->fetchAll(PDO::FETCH_ASSOC); // lat 3 - pencarian di server dengan ILIKE
+} else {
+    $daftarBuku = $pdo->query("SELECT * FROM buku ORDER BY id DESC")
+        ->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <section>
     <h2>Daftar Buku</h2>
@@ -14,8 +25,13 @@ $daftarBuku = $_SESSION['buku'] ?? [];
     <?php endif; ?>
 
     <div class="search-box">
-        <label for="search-input">Cari Judul Buku</label>
-        <input type="text" id="search-input" placeholder="Ketik judul buku...">
+      <form method="GET" action="list.php" class="mb-3 d-flex">
+    <input type="text" name="keyword" class="form-control me-2" placeholder="Cari judul buku..." value="<?= htmlspecialchars($_GET['keyword'] ?? '') ?>">
+    <button type="submit" class="btn btn-primary">Cari</button>
+    <?php if (!empty($_GET['keyword'])): ?>
+        <a href="list.php" class="btn btn-secondary ms-2">Reset</a>
+    <?php endif; ?>
+</form>
     </div>
     <div class="table-responsive">
         <table>
@@ -24,34 +40,34 @@ $daftarBuku = $_SESSION['buku'] ?? [];
                     <th>Judul</th>
                     <th>Pengarang</th>
                     <th>Tahun</th>
+                    <th>Penerbit</th>
                     <th>Stok</th>
                     <th>Aksi</th>
-                    <th>Kategori</th>
                 </tr>
             </thead>
             <tbody>
-            <?php if (empty($daftarBuku)): ?>
-                <tr>
-                    <td colspan="6">Belum ada data buku. Silakan tambah lewat menu "Tambah Buku".</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($daftarBuku as $buku): ?>
+                <?php if (empty($daftarBuku)): ?>
                     <tr>
-                        <td><?php echo $buku['judul']; ?></td>
-                        <td><?php echo $buku['pengarang']; ?></td>
-                        <td><?php echo $buku['tahun']; ?></td>
-                        <td><?php echo $buku['stok']; ?></td>
-                        
-                        <td>
-                            <button type="button">Edit</button>
-                            <button type="button" class="btn-hapus">Hapus</button>
-                        </td>
-                        <td><?php echo $buku['kategori']; ?></td>
+                        <td colspan="5">Belum ada data buku. Silakan tambah lewat menu "Tambah Buku".</td>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                <?php else: ?>
+                    <?php foreach ($daftarBuku as $buku): ?>
+                        <tr>
+                            <td><?php echo $buku['judul']; ?></td>
+                            <td><?php echo $buku['pengarang']; ?></td>
+                            <td><?php echo $buku['tahun']; ?></td>
+                            <td><?php echo $buku['stok']; ?></td>
+                            <td>
+                                <button type="button">Edit</button>
+                                <button type="button" class="btn-hapus">Hapus</button>
+                            </td>
+                        </tr>
+                        
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 </section>
+
 <?php include __DIR__ . '/../includes/footer.php'; ?>

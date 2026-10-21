@@ -1,70 +1,34 @@
-<!DOCTYPE html>
-<html lang="id">
+<?php
+$page_title = "Tambah Anggota";
+include __DIR__ . '/../includes/header.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SIMPUS-Mini | Beranda</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
+$flash = $_SESSION['flash'] ?? null;
+unset($_SESSION['flash']);
+?>
+<section>
+    <h2>Tambah Anggota Baru</h2>
+    <?php if ($flash): ?>
+        <p class="flash flash-<?php echo $flash['type']; ?>"><?php echo $flash['pesan']; ?></p>
+    <?php endif; ?>
 
-<body>
-    <header>
-        <h1>SIMPUS-Mini</h1>
-        <button type="button" id="nav-toggle-btn" class="nav-toggle-label" aria-label="Menu">&#9776;</button>
-        
-        <nav>
-            <ul>
-                <li><a href="../index.html">Beranda</a></li>
-                <li><a href="../buku/list.html">Daftar Buku</a></li>
-                <li><a href="tambah.html">Tambah buku</a></li>
-                <li><a href="list.html">Daftar Anggota</a></li>
-
-            </ul>
-        </nav>
-        <label for="nav-toggle" class="nav-toggle-label">&#9776;</label>
-    </header>
-
-    <main>
-        <section>
-            <span>* (wajib diisi)</span>
-            <h2>Tambah Anggota</h2>
-            <form id="form-tambah" method="post" action="proses_tambah.php">
-                <p>
-                    <label for="nama">Nama</label><br>
-                    <input type="text" id="nama" name="nama" required>
-                </p>
-                <p>
-                    <label for="nama">Email</label><br>
-                    <input type="email" id="nama" name="nama" required>
-                </p>
-                <p>
-                    <label for="no_anggota">No Anggota</label><br>
-                    <input type="text" id="no_anggota" name="no_anggota" required>
-                </p>
-                <p>
-                    <label for="alamat">Alamat</label><br>
-                    <textarea name="alamat" id="alamat" rows="10" cols="30"></textarea>
-                    <input type="text" id="alamat" name="alamat">
-                </p>
-                <p>
-                    <label for="tanggal_lahir">Tangga Lahir</label><br>
-                    <input type="datetime-local" value="dd/mm/yyyy hh:mm:ss" id="tanggal_lahir">
-                </p>
-                <p>
-                    <label for="no_hp">No. HP</label><br>
-                    <input type="number" id="no_hp" name="no_hp">
-                </p>
-                <p>
-                    <button type="submit">Simpan</button>
-                </p>
-            </form>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 SIMPUS-Mini &mdash; Jobsheet 1</p>
-    </footer>
-    <script src="../assets/js/app.js"></script>
-</body>
-
-</html>
+    <form id="form-tambah" method="post" action="proses_tambah.php">
+        <div>
+            <label for="nama">Nama *</label>
+            <input type="text" id="nama" name="nama" required>
+        </div>
+        <div>
+            <label for="no_anggota">No. Anggota *</label>
+            <input type="text" id="no_anggota" name="no_anggota" required>
+        </div>
+        <div>
+            <label for="alamat">Alamat</label>
+            <textarea id="alamat" name="alamat"></textarea>
+        </div>
+        <div>
+            <label for="no_hp">No. HP</label>
+            <input type="text" id="no_hp" name="no_hp">
+        </div>
+        <button type="submit">Simpan</button>
+    </form>
+</section>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

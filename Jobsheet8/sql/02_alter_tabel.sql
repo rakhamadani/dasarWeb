@@ -1,0 +1,1 @@
+ALTER TABLE buku ADD COLUMN tanggal_ditambahkan TIMESTAMP DEFAULT NOW();
